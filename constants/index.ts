@@ -111,7 +111,7 @@ const projects = [
       { name: "css", color: "pink-text-gradient" },
     ],
     image: code,
-    source_code_link: "https://lcc33.github.io/Code-no-hero/",
+    source_code_link: "https://codenohero.vercel.app",
   },
   {
     id: "veritas",

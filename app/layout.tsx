@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default: "Muhammad Is'haq | Frontend Developer & UI Architect",
     template: "%s | Muhammad Is'haq",
   },
-  description: 
+  description:
     "Frontend Developer specializing in high-performance React/Next.js interfaces. Leading tech at Very Unreal and building AI-powered platforms like ZenoAI.",
   keywords: [
     "Frontend Developer",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://muhammade.vercel.app", // Update this with your actual URL
+    url: "https://muhammadishaq.xyz", // Update this with your actual URL
     title: "Muhammad Is'haq | Frontend Developer",
     description: "Building the next generation of high-performance web interfaces.",
     siteName: "Muhammad Is'haq Portfolio",
