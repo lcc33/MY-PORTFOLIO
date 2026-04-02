@@ -7,6 +7,8 @@ import zenoai from "../app/assets/zeno.png";
 import buymebread from "../app/assets/bmb.png";
 import diamondpark from "../app/assets/diamond.png";
 import code from "../app/assets/code.png";
+import cmn from "../app/assets/cmn.png";
+import helious from "../app/assets/helious.png";
 
 
 const projects = [
@@ -25,6 +27,36 @@ const projects = [
     source_code_link: "https://zenoai-ten.vercel.app/",
   },
   {
+    id: "helious",
+    name: "Helious",
+    status: "Live",
+    description: "Helious is an AI-powered smart contract analyzer and on-chain guardian. Paste any contract address to get instant safety scoring, risk assessment, and plain English breakdown before signing.",
+    vision: "To make Web3 safer by helping users and dApps detect risky smart contracts using AI + on-chain intelligence.",
+    tags: [
+      { name: "nextjs", color: "blue-text-gradient" },
+      { name: "tailwindcss", color: "green-text-gradient" },
+      { name: "typescript", color: "pink-text-gradient" },
+      { name: "ai", color: "orange-text-gradient" },        // optional
+      { name: "web3", color: "purple-text-gradient" },      // optional
+    ],
+    image: helious,
+    source_code_link: "https://heliouss.vercel.app",
+  },
+  {
+    id: "challengemenow",
+    name: "ChallengeMeNow",
+    status: "Live",
+    description: "ChallengeMeNow is a timed skill-assessment platform that lets users prove their real knowledge in various tech skills through real-world challenges under time pressure. Features granular scoring, weak area detection, and progress tracking.",
+    vision: "To eliminate guesswork about skill levels by providing honest, measurable proof of proficiency for developers, teams, and organizations.",
+    tags: [
+      { name: "nextjs", color: "blue-text-gradient" },
+      { name: "typescript", color: "green-text-gradient" },
+      { name: "tailwindcss", color: "pink-text-gradient" },
+    ],
+    image: cmn,
+    source_code_link: "https://challengemenow-one.vercel.app",
+  },
+  {
     id: "tracevault",
     name: "TraceVault",
     status: "MVP",
@@ -38,6 +70,7 @@ const projects = [
     image: tracevault,
     source_code_link: "https://tracevault.xyz",
   },
+  // ... rest of your projects remain the same
   {
     id: "buymebread",
     name: "BuyMeBread",

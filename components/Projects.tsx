@@ -2,8 +2,8 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { projects } from "../constants"; // Adjust path to your index.ts
-import { ExternalLink } from "lucide-react";
+import { projects } from "../constants";
+import { ExternalLink, ArrowRight } from "lucide-react";
 
 type ProjectCardProps = {
   project: (typeof projects)[0];
@@ -11,7 +11,6 @@ type ProjectCardProps = {
 };
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
-  // We alternate the layout based on the index for a dynamic feel
   const isEven = index % 2 === 0;
 
   return (
@@ -24,7 +23,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
     >
       {/* Title & Header Section */}
       <div className="text-center mb-16">
-        <motion.span 
+        <motion.span
           className="text-orange-500 font-mono text-xs tracking-[0.5em] uppercase mb-4 block"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -34,50 +33,78 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-4 text-white uppercase">
           {project.name}
         </h2>
-        <div className="flex justify-center gap-3">
+        <div className="flex justify-center gap-3 flex-wrap">
           {project.tags.map((tag) => (
-            <span key={tag.name} className="text-[10px] uppercase tracking-widest text-zinc-500 border border-zinc-800 px-3 py-1 rounded-full">
+            <span
+              key={tag.name}
+              className="text-[10px] uppercase tracking-widest text-zinc-500 border border-zinc-800 px-3 py-1 rounded-full"
+            >
               {tag.name}
             </span>
           ))}
         </div>
       </div>
 
-      {/* Hero Image Container */}
+      {/* Main Content Grid */}
       <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-center`}>
-        {/* Main Image Slot (Spans 8 columns) */}
+        {/* Image Container */}
         <div className={`lg:col-span-8 ${!isEven ? 'lg:order-2' : ''}`}>
           <div className="relative aspect-video rounded-3xl overflow-hidden bg-zinc-900 border border-white/5 group-hover:border-white/20 transition-colors">
             <Image
               src={project.image}
               alt={project.name}
               fill
-              className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+              className="object-cover opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
             />
-            {/* Glow Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-            
-            <a 
+
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+            {/* Visit Button - Always visible on mobile, hover on desktop */}
+            <a
               href={project.source_code_link}
               target="_blank"
-              className="absolute bottom-8 right-8 bg-white text-black p-4 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 hover:bg-orange-500"
+              rel="noopener noreferrer"
+              className="absolute bottom-6 right-6 lg:bottom-8 lg:right-8 
+                         flex items-center gap-2 bg-white text-black px-6 py-3.5 
+                         rounded-2xl font-medium text-sm transition-all duration-300
+                         hover:bg-orange-500 hover:text-white active:scale-95
+                         lg:scale-0 lg:group-hover:scale-100"
             >
-              <ExternalLink size={24} />
+              Visit Project
+              <ExternalLink size={18} />
             </a>
           </div>
         </div>
 
-        {/* Content Side Slot (Spans 4 columns) */}
+        {/* Content Side */}
         <div className={`lg:col-span-4 space-y-6 ${!isEven ? 'lg:order-1 lg:text-right' : ''}`}>
           <p className="text-zinc-400 text-lg leading-relaxed font-medium">
             {project.description}
           </p>
+
           <div className={`flex ${!isEven ? 'justify-end' : 'justify-start'}`}>
             <div className="h-[1px] w-20 bg-orange-600" />
           </div>
+
           <div className="space-y-2">
-             <h4 className="text-white font-bold uppercase text-sm tracking-widest">The Vision</h4>
-             <p className="text-zinc-500 text-sm line-clamp-3">{project.vision}</p>
+            <h4 className="text-white font-bold uppercase text-sm tracking-widest">The Vision</h4>
+            <p className="text-zinc-500 text-sm leading-relaxed line-clamp-4">
+              {project.vision}
+            </p>
+          </div>
+
+          {/* Mobile-only visible link (fallback) */}
+          <div className="lg:hidden pt-4">
+            <a
+              href={project.source_code_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 transition-colors font-medium"
+            >
+              View Live Project
+              <ArrowRight size={18} />
+            </a>
           </div>
         </div>
       </div>
@@ -95,13 +122,13 @@ export default function ProjectsSection() {
           <h3 className="text-zinc-500 font-mono tracking-[0.3em] uppercase text-lg">Selected Works</h3>
         </div>
 
-        {/* Mapping through projects */}
+        {/* Projects */}
         <div className="space-y-20">
           {projects.map((project, index) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project} 
-              index={index} 
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
             />
           ))}
         </div>
