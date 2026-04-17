@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -10,23 +10,24 @@ function ParticleField() {
   const pointsRef = useRef<THREE.Points>(null!);
   const mouse = useRef({ x: 0, y: 0 });
   const { viewport } = useThree();
+  const [positions, setPositions] = useState<Float32Array | null>(null);
 
-  // Adaptive particle count & spread based on screen size
-  const particleCount = viewport.width < 6 ? 800 : 1400; // Fewer on mobile
+  const particleCount = viewport.width < 6 ? 800 : 1400;
 
-  const positions = useMemo(() => {
-    const pos = new Float32Array(particleCount * 3);
-    const spread = viewport.width < 6 ? 22 : 35; // Tighter spread on mobile
+  useEffect(() => {
+    if (!positions) {
+      const pos = new Float32Array(particleCount * 3);
+      const spread = viewport.width < 6 ? 22 : 35;
 
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      pos[i] = (Math.random() - 0.5) * spread;
-      pos[i + 1] = (Math.random() - 0.5) * spread * 1.4; // Slightly taller vertically
-      pos[i + 2] = (Math.random() - 0.5) * spread;
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        pos[i] = (Math.random() - 0.5) * spread;
+        pos[i + 1] = (Math.random() - 0.5) * spread * 1.4;
+        pos[i + 2] = (Math.random() - 0.5) * spread;
+      }
+      setPositions(pos);
     }
-    return pos;
-  }, [particleCount, viewport.width]);
+  }, [particleCount, viewport.width, positions]);
 
-  // Mouse interaction (lighter on mobile)
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -39,36 +40,27 @@ function ParticleField() {
   useFrame((state) => {
     if (!pointsRef.current) return;
 
-    // Slower rotation on mobile for better performance
     const speed = viewport.width < 6 ? 0.008 : 0.015;
     pointsRef.current.rotation.y = state.clock.getElapsedTime() * speed;
-
-    // Gentle mouse influence
     pointsRef.current.rotation.x = mouse.current.y * 0.08;
     pointsRef.current.rotation.y += mouse.current.x * 0.04;
   });
 
-  return (
+  return positions ? (
     <Points ref={pointsRef} positions={positions} stride={3} frustumCulled={false}>
       <PointMaterial
         transparent
         color="#FF4D29"
-        size={viewport.width < 6 ? 0.14 : 0.095}   // Bigger particles on mobile
+        size={viewport.width < 6 ? 0.14 : 0.095}
         sizeAttenuation={true}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
     </Points>
-  );
+  ) : null;
 }
 
 export default function HeroSection() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
     <>
       <style>{`
@@ -76,44 +68,58 @@ export default function HeroSection() {
 
         .mono { font-family: 'Space Mono', monospace; }
 
-        @keyframes twinkle {
-          from { opacity: 0.1; transform: scale(0.8); }
-          to   { opacity: 0.8; transform: scale(1.2); }
+        .scanline {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            to bottom,
+            transparent 50%,
+            rgba(255, 255, 255, 0.03) 50%
+          );
+          background-size: 100% 4px;
+          pointer-events: none;
+          animation: scan 8s linear infinite;
+          z-index: 20;
+        }
+
+        @keyframes scan {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
         }
       `}</style>
 
       <div className="relative min-h-screen bg-black text-white mono overflow-hidden flex flex-col">
 
         {/* 3D Particles Background */}
-        {mounted && (
-          <div className="absolute inset-0 z-0">
-            <Canvas
-              camera={{ position: [0, 0, 15], fov: 60 }}
-              gl={{
-                alpha: true,
-                antialias: false,
-                powerPreference: "high-performance"
-              }}
-              style={{ background: "transparent" }}
-              dpr={[1, 1.5]}           // Lower dpr on mobile for performance
-            >
-              <ParticleField />
-            </Canvas>
-          </div>
-        )}
+        <div className="absolute inset-0 z-0">
+          <Canvas
+            camera={{ position: [0, 0, 15], fov: 60 }}
+            gl={{
+              alpha: true,
+              antialias: false,
+              powerPreference: "high-performance"
+            }}
+            style={{ background: "transparent" }}
+            dpr={[1, 1.5]}
+          >
+            <ParticleField />
+          </Canvas>
+        </div>
 
         {/* Subtle Grid */}
         <div
           className="absolute inset-0 z-10 pointer-events-none opacity-[0.03]"
           style={{
-            backgroundImage:
-              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+            backgroundImage: "linear-gradient(#fff 1px, transparent 1px)",
             backgroundSize: "70px 70px",
           }}
         />
 
-        {/* Scanline */}
-        <div className="scanline z-20" />
+        {/* Scanline Effect */}
+        <div className="scanline" />
 
         {/* Main Content */}
         <section className="relative z-30 flex-1 flex flex-col items-center justify-center px-6 pt-16 pb-20">
@@ -126,13 +132,34 @@ export default function HeroSection() {
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tighter mb-6">
               Hi, I&apos;m Muhammad
             </h1>
-            <p className="text-base sm:text-lg md:text-2xl text-zinc-300 max-w-2xl mx-auto leading-tight">
+
+            <p className="text-base sm:text-lg md:text-2xl text-zinc-300 max-w-2xl mx-auto leading-tight mb-12">
               I build high-performance frontend architectures <br className="hidden md:block" />
               and interactive user interfaces.
             </p>
+
+            {/* New CTA Button - Black & White Stylish */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Link
+                href="https://hireme.muhammadishaq.xyz"
+                target="_blank"
+                className="group relative inline-flex items-center rounded-full justify-center px-10 py-5 border-2 border-white bg-black hover:bg-white hover:text-black transition-all duration-300 text-lg font-medium tracking-wider overflow-hidden"
+              >
+                <span className="relative z-10">WHY YOU SHOULD HIRE ME</span>
+
+                {/* Subtle shine effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              </Link>
+            </motion.div>
           </motion.div>
 
-          {/* Scroll Indicator - Better for mobile */}
+          {/* Scroll Indicator */}
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-40">
             <Link
               href="#about"

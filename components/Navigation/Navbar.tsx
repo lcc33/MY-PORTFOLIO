@@ -12,6 +12,7 @@ export default function Navbar() {
     { name: "Projects", href: "#work" },
     { name: "Skills", href: "#skills" },
     { name: "Experience", href: "#experience" },
+    { name: "Hire Me", href: "https://hireme.muhammadishaq.xyz" }
   ];
 
   return (
@@ -30,9 +31,9 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden md:flex gap-10 text-[11px] uppercase tracking-[0.2em] font-bold text-zinc-400">
           {navLinks.map((link) => (
-            <Link 
+            <Link
               key={link.name}
-              href={link.href} 
+              href={link.href}
               className="hover:text-white transition-colors duration-300"
             >
               {link.name}
@@ -41,7 +42,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button 
+        <button
           className="md:hidden text-white p-2"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
@@ -78,8 +79,8 @@ export default function Navbar() {
                 </motion.div>
               ))}
             </div>
-            
-           
+
+
           </motion.div>
         )}
       </AnimatePresence>

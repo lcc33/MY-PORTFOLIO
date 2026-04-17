@@ -65,11 +65,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
               href={project.source_code_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-6 right-6 lg:bottom-8 lg:right-8 
-                         flex items-center gap-2 bg-white text-black px-6 py-3.5 
-                         rounded-2xl font-medium text-sm transition-all duration-300
-                         hover:bg-orange-500 hover:text-white active:scale-95
-                         lg:scale-0 lg:group-hover:scale-100"
+              className="absolute bottom-6 right-6 lg:bottom-8 lg:right-8 flex items-center gap-2 bg-white text-black px-6 py-3.5 rounded-2xl font-medium text-sm transition-all duration-300 hover:bg-orange-500 hover:text-white active:scale-95 lg:scale-0 lg:group-hover:scale-100"
             >
               Visit Project
               <ExternalLink size={18} />
