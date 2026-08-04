@@ -50,7 +50,7 @@ export default function About() {
               className="space-y-6 text-zinc-400 text-lg leading-relaxed max-w-2xl"
             >
               <p>
-                My journey as a Frontend Developer is driven by a passion for
+                My journey as a Frontend Engineer is driven by a passion for
                 performance and real-world usability. I don&apos;t just write
                 code; I architect digital experiences that feel fluid and look
                 premium.

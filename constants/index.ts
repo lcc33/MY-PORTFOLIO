@@ -54,7 +54,7 @@ const projects = [
       { name: "tailwindcss", color: "pink-text-gradient" },
     ],
     image: cmn,
-    source_code_link: "https://challengemenow-one.vercel.app",
+    source_code_link: "https://challengemenow.xyz",
   },
   {
     id: "tracevault",
@@ -83,7 +83,7 @@ const projects = [
       { name: "nestjs", color: "pink-text-gradient" },
     ],
     image: buymebread,
-    source_code_link: "https://buymebread.vercel.app/",
+    source_code_link: "https://buymebread.ng/",
   },
   {
     id: "a-zpetstore",

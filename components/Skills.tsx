@@ -4,19 +4,19 @@ import { motion } from "framer-motion";
 const skillCategories = [
   {
     category: "Frontend",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "JavaScript"],
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "JavaScript", "HTML", "CSS"],
     color: "group-hover:text-blue-400",
     glow: "group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]"
   },
   {
     category: "Backend & Database",
-    skills: ["Node.js", "MongoDB", "Firebase"],
+    skills: ["Node.js", "MongoDB", "Firebase", "PostgreSQL", "Express.js"],
     color: "group-hover:text-orange-400",
     glow: "group-hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]"
   },
   {
     category: "Tools & Others",
-    skills: ["Git", "Docker", "Vercel"],
+    skills: ["Git", "Docker", "Vercel", "Figma", "Cloudinary"],
     color: "group-hover:text-purple-400",
     glow: "group-hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]"
   }

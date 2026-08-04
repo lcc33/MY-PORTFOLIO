@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const experiences = [
   {
-    title: "Tech Director",
+    title: "CTO",
     company_name: "Very Unreal",
     date: "Sept 2025 - Present",
     color: "bg-orange-500",
@@ -15,9 +15,9 @@ const experiences = [
     ],
   },
   {
-    title: "Frontend Developer",
+    title: "Frontend Engineer",
     company_name: "ReferX",
-    date: "Oct 2025 - January 2026",
+    date: "January 2025 - January 2026",
     color: "bg-blue-500",
     points: [
       "Collaborating with designers and developers for seamless user experiences.",
@@ -26,16 +26,16 @@ const experiences = [
     ],
   },
   {
-    title: "Frontend Developer",
-    company_name: "Personal Projects",
-    date: "Jan 2024 – Present",
-    color: "bg-purple-500",
+    title: "Frontend Engineer",
+    company_name: "Taskhub",
+    date: "Mar 2024 - July 2025",
+    color: "bg-green-500",
     points: [
-      "Building web applications using React.js, Next.js, and TypeScript.",
-      "Designing and developing responsive UI components.",
-      "Hosting and managing projects on Vercel and Pxxl space.",
+      "Developing and maintaining responsive web applications.",
+      "Collaborating with backend developers to integrate APIs.",
+      "Implementing modern UI/UX designs and ensuring cross-browser compatibility.",
     ],
-  },
+  }
 ];
 
 export default function Experience() {
