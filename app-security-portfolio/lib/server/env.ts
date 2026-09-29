@@ -6,6 +6,10 @@ export function adminEmail() {
   return process.env.ADMIN_EMAIL?.trim().toLowerCase() || "";
 }
 
+export function adminPassword() {
+  return process.env.ADMIN_PASSWORD?.trim() || "";
+}
+
 export function supabaseEnv() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -20,7 +24,7 @@ export function supabaseEnv() {
 
 export function plunkEnv() {
   const apiKey = process.env.PLUNK_SECRET_KEY;
-  let from = process.env.PLUNK_FROM || process.env.NEWSLETTER_FROM;
+  let from = process.env.PLUNK_FROM;
 
   if (!apiKey || !from) {
     return null;

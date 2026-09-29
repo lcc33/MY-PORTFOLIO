@@ -32,7 +32,7 @@ export const projects = [
   {
     title: "AppSec Portfolio",
     summary:
-      "This site: a plain blog and newsletter product used to document secure design decisions in public.",
+      "This site: a plain blog and portfolio used to document secure design decisions in public.",
     href: "/blog/first-principles-appsec",
   },
   {

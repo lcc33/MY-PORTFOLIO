@@ -23,9 +23,9 @@ export default function SecurityPage() {
 
       <h2>Scope</h2>
       <p>
-        The main site, blog, admin editor, API routes, authentication,
-        newsletter flows, comments, and likes are in scope. Third-party services
-        such as Supabase, Vercel, Resend, and Cloudflare should be reported to
+        The main site, blog, admin editor, API routes, and authentication
+        are in scope. Third-party services
+        such as Supabase, Vercel, and Cloudflare should be reported to
         those vendors directly.
       </p>
 

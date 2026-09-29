@@ -1,8 +1,5 @@
 import { cookies } from "next/headers";
-import { adminEmail, siteUrl, supabaseEnv } from "@/lib/server/env";
-
-export const accessCookie = "portfolio-admin-access-token";
-export const refreshCookie = "portfolio-admin-refresh-token";
+import { adminEmail, supabaseEnv } from "@/lib/server/env";
 
 export type SupabasePost = {
   id: string;
@@ -25,114 +22,112 @@ function baseHeaders(key: string) {
   };
 }
 
-export async function generateAdminMagicLink(email: string) {
-  const env = supabaseEnv();
-  if (!env) {
-    throw new Error("Supabase environment variables are not configured.");
-  }
-
-  const redirectTo = `${siteUrl()}/auth/confirm`;
-  const response = await fetch(`${env.url}/auth/v1/admin/generate_link`, {
-    method: "POST",
-    headers: baseHeaders(env.serviceRoleKey),
-    body: JSON.stringify({
-      type: "magiclink",
-      email,
-      options: { redirect_to: redirectTo },
-    }),
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Supabase magic link failed: ${response.status} ${text}`);
-  }
-
-  const data = await response.json();
-  const actionLink = data.action_link || data.properties?.action_link;
-  if (!actionLink) {
-    throw new Error("Supabase did not return an action link.");
-  }
-
-  return actionLink as string;
-}
-
-export async function verifyTokenHash(tokenHash: string, type: string) {
-  const env = supabaseEnv();
-  if (!env) {
-    throw new Error("Supabase environment variables are not configured.");
-  }
-
-  const response = await fetch(`${env.url}/auth/v1/verify`, {
-    method: "POST",
-    headers: baseHeaders(env.anonKey),
-    body: JSON.stringify({
-      token_hash: tokenHash,
-      type,
-    }),
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Supabase verification failed: ${response.status} ${text}`);
-  }
-
-  return response.json();
-}
-
 export async function getAdminSession() {
-  const env = supabaseEnv();
   const allowedEmail = adminEmail();
-  if (!env || !allowedEmail) {
+  if (!allowedEmail) {
     return null;
   }
 
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get(accessCookie)?.value;
-  if (!accessToken) {
+  const sessionToken = cookieStore.get("portfolio-admin-session")?.value;
+  const sessionEmail = cookieStore.get("portfolio-admin-email")?.value;
+
+  if (!sessionToken || !sessionEmail) {
     return null;
   }
 
-  const response = await fetch(`${env.url}/auth/v1/user`, {
-    headers: {
-      apikey: env.anonKey,
-      Authorization: `Bearer ${accessToken}`,
-    },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
+  if (sessionEmail.toLowerCase() !== allowedEmail) {
     return null;
   }
 
-  const user = await response.json();
-  const email = String(user.email || "").toLowerCase();
-
-  if (email !== allowedEmail) {
-    return null;
-  }
-
-  return { email, id: user.id as string };
+  return { email: sessionEmail };
 }
 
-export async function listAdminPosts() {
+export async function listAdminPosts(): Promise<SupabasePost[]> {
   const env = supabaseEnv();
   if (!env) {
     return [];
   }
 
-  const response = await fetch(
-    `${env.url}/rest/v1/posts?select=*&order=created_at.desc`,
-    {
-      headers: baseHeaders(env.serviceRoleKey),
-      cache: "no-store",
-    },
-  );
+  try {
+    const response = await fetch(
+      `${env.url}/rest/v1/posts?select=*&order=created_at.desc`,
+      {
+        headers: baseHeaders(env.serviceRoleKey),
+        cache: "no-store",
+      },
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return [];
+    }
+
+    return (await response.json()) as SupabasePost[];
+  } catch {
     return [];
   }
+}
 
-  return (await response.json()) as SupabasePost[];
+export async function listPublishedPosts(): Promise<
+  Array<{
+    slug: string;
+    title: string;
+    excerpt: string;
+    date: string;
+    readingTime: string;
+    tags: string[];
+  }>
+> {
+  const env = supabaseEnv();
+  if (!env) return [];
+
+  try {
+    const response = await fetch(
+      `${env.url}/rest/v1/posts?status=eq.published&select=*&order=published_at.desc,created_at.desc`,
+      {
+        headers: baseHeaders(env.serviceRoleKey),
+        cache: "no-store",
+      },
+    );
+
+    if (!response.ok) return [];
+    const rows = (await response.json()) as SupabasePost[];
+    return rows.map((p) => {
+      const words = (p.content_md || "").trim().split(/\s+/).length;
+      const readingMinutes = Math.max(1, Math.ceil(words / 200));
+      return {
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt || "",
+        date: p.published_at ? p.published_at.slice(0, 10) : p.created_at.slice(0, 10),
+        readingTime: `${readingMinutes} min read`,
+        tags: p.tags && p.tags.length > 0 ? p.tags : ["appsec"],
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+export async function getPostBySlug(slug: string): Promise<SupabasePost | null> {
+  const env = supabaseEnv();
+  if (!env) return null;
+
+  try {
+    const response = await fetch(
+      `${env.url}/rest/v1/posts?slug=eq.${encodeURIComponent(slug)}&select=*`,
+      {
+        headers: baseHeaders(env.serviceRoleKey),
+        cache: "no-store",
+      },
+    );
+
+    if (!response.ok) return null;
+    const rows = (await response.json()) as SupabasePost[];
+    return rows[0] || null;
+  } catch {
+    return null;
+  }
 }
 
 export async function createPost(input: {

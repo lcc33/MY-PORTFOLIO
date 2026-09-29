@@ -23,7 +23,7 @@ export function SiteClock() {
 
   return (
     <time
-      className="site-clock"
+      className="site-clock flex  justify-end text-4xl"
       dateTime={new Date().toISOString()}
       suppressHydrationWarning
     >

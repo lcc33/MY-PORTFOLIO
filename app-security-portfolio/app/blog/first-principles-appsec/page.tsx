@@ -13,7 +13,7 @@ export default function FirstPrinciplesPost() {
 
       <p>
         A personal blog still has a real attack surface. It accepts email,
-        renders content, stores comments, sends mail, and has an admin path.
+        renders content, sends mail, and has an admin path.
         That is enough to practice the basics honestly.
       </p>
 
@@ -21,14 +21,13 @@ export default function FirstPrinciplesPost() {
       <p>
         The admin route gets a server-side allowlist check on every mutation.
         Published posts are public, but drafts are not. Readers can only change
-        their own likes, comments, and profile data.
+        their own data.
       </p>
 
       <h2>What stays boring</h2>
       <p>
-        Comments are plain text. Markdown is sanitized before rendering. Signup
-        returns the same message whether an email already exists. Newsletter
-        unsubscribe changes mail preference, not account ownership.
+        Markdown is sanitized before rendering. Signup
+        returns the same message whether an email already exists.
       </p>
 
       <h2>How I will test it</h2>
@@ -37,22 +36,6 @@ export default function FirstPrinciplesPost() {
         payload suite for content rendering, and CI scans for dependencies,
         secrets, and obvious static-analysis issues.
       </p>
-
-      <section className="section form-block" aria-labelledby="engage-title">
-        <h2 id="engage-title">Like or comment</h2>
-        <p>
-          The production version will require a confirmed account before this
-          form accepts anything. That keeps engagement tied to an accountable
-          reader profile without exposing email addresses.
-        </p>
-        <form>
-          <label>
-            Comment
-            <textarea name="comment" maxLength={2000} />
-          </label>
-          <button type="button">Sign in to comment</button>
-        </form>
-      </section>
     </article>
   );
 }

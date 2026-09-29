@@ -1,8 +1,24 @@
 import Link from "next/link";
-import { posts } from "@/lib/content";
+import { posts as staticPosts } from "@/lib/content";
 
-export function PostList({ limit }: { limit?: number }) {
-  const visiblePosts = limit ? posts.slice(0, limit) : posts;
+export type PostItem = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  readingTime: string;
+  tags: string[];
+};
+
+export function PostList({
+  items,
+  limit,
+}: {
+  items?: PostItem[];
+  limit?: number;
+}) {
+  const source = items && items.length > 0 ? items : staticPosts;
+  const visiblePosts = limit ? source.slice(0, limit) : source;
 
   return (
     <ol className="post-list">

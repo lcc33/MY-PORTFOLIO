@@ -188,6 +188,56 @@ p {
   margin-top: 18px;
 }
 
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+  line-height: 1.1;
+  margin: 0;
+  max-width: none;
+  font-weight: 600;
+}
+
+.hero-name {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-role {
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  color: var(--muted);
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.hero-description {
+  color: var(--muted);
+  font-size: 1.08rem;
+  margin: 0;
+  max-width: 52ch;
+  border-left: 3px solid var(--accent);
+  padding-left: 16px;
+}
+
+.error-text {
+  color: #e53e3e;
+  font-size: 0.95rem;
+  margin: 4px 0;
+}
+
 .section {
   margin-top: 48px;
 }
@@ -303,6 +353,7 @@ code {
     opacity: 0;
     transform: translateY(4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

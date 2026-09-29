@@ -31,13 +31,25 @@ export async function createPostAction(formData: FormData) {
     redirect("/admin/blog?error=missing-fields");
   }
 
-  await createPost({
-    title,
-    slug: slugify(slugInput || title),
-    excerpt,
-    contentMd,
-    status,
-  });
+  try {
+    await createPost({
+      title,
+      slug: slugify(slugInput || title),
+      excerpt,
+      contentMd,
+      status,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    if (
+      message.includes("PGRST205") ||
+      message.includes("Could not find the table") ||
+      message.includes("relation \"posts\" does not exist")
+    ) {
+      redirect("/admin/blog?error=missing-table");
+    }
+    redirect(`/admin/blog?error=save-failed&details=${encodeURIComponent(message)}`);
+  }
 
   revalidatePath("/admin/blog");
   revalidatePath("/blog");
